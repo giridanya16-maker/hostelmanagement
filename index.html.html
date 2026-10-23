@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hostelo – Hostel Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--f-title:"Playfair Display",Georgia,serif;--f-sub:"Playfair Display",Georgia,serif;--bg:#f4f6fa;--surface:#fff;--ink:#0f1a30;--mute:#5d6882;--line:#e2e7f0;--acc:#2257d6;--acc-ink:#fff;--navy:#0e1b3a;--gold:#d4a73a;--mint:#16805a;--sun:#b7791f;--rose:#c2413b;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1120;--surface:#121b30;--ink:#e8edf7;--mute:#97a3bd;--line:#232f4a;--acc:#6b95ff;--acc-ink:#0a1120;--navy:#08101f;--mint:#3cc08c;--sun:#e0a94a;--rose:#ef7b74;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1120;--surface:#121b30;--ink:#e8edf7;--mute:#97a3bd;--line:#232f4a;--acc:#6b95ff;--acc-ink:#0a1120;--navy:#08101f;--mint:#3cc08c;--sun:#e0a94a;--rose:#ef7b74;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15.5px/1.55 "Schibsted Grotesk",system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+h1,h2,h3{font-family:var(--f-sub);margin:0;letter-spacing:-.015em;line-height:1.15}
+h1{font-family:var(--f-title);font-weight:800;font-size:clamp(2.3rem,6vw,4rem);line-height:1.1;letter-spacing:0}h2{font-weight:800;font-size:2rem;letter-spacing:0}h3{font-weight:700;font-size:1.3rem;letter-spacing:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.logo{font:800 1.6rem var(--f-title);display:flex;align-items:center;gap:.65rem;color:#fff}
+.logo i{font-style:normal;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#f1d98f);color:#0e1b3a;display:grid;place-items:center;font-size:1rem}
+/* login */
+#login{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr;transition:opacity .35s}
+#login.leaving{opacity:0}
+.brand{background:var(--navy);color:#dbe3f5;padding:2.2rem 3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;position:relative;overflow:hidden;
+background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;animation:grid 30s linear infinite}
+.brand::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-160px;bottom:-160px;background:radial-gradient(circle,rgba(212,167,58,.35),transparent 65%);animation:glow 7s ease-in-out infinite alternate}
+@keyframes grid{to{background-position:44px 44px}}@keyframes glow{to{transform:scale(1.25);opacity:.7}}
+.brand h1{color:#fff;max-width:16ch}.brand p{max-width:44ch;margin:1rem 0 1.8rem;color:#b9c5e0}
+.brand>*{position:relative;z-index:1;animation:rise .7s backwards}.brand>*:nth-child(2){animation-delay:.12s}.brand>*:nth-child(3){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.facts{display:flex;gap:2rem;flex-wrap:wrap}.facts div{border-left:2px solid var(--gold);padding-left:.8rem}.facts b{display:block;font:800 2rem var(--f-sub);color:#fff}.facts span{font-size:.85rem;color:#a7b4d2}
+.panel{display:grid;place-items:center;padding:2rem 1.4rem}.formbox{width:100%;max-width:380px;animation:rise .7s .2s backwards}
+.formbox h2{font-size:2.2rem;margin-bottom:.3rem}
+.roles{display:flex;background:var(--line);border-radius:10px;padding:3px;margin:1.2rem 0}
+.roles button{flex:1;border:0;background:none;padding:.5rem;border-radius:8px;cursor:pointer;font-weight:500;color:var(--mute);transition:.25s}
+.roles button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(15,26,48,.15)}
+.field{display:block;margin-bottom:.9rem}.field span{display:block;font-weight:500;font-size:.88rem;margin-bottom:.25rem}
+input,select,textarea{width:100%;padding:.62rem .8rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 20%,transparent);outline:0}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;padding:.7rem 1.3rem;border-radius:8px;font-weight:600;cursor:pointer;transition:transform .15s,filter .2s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}.formbox .btn{width:100%}
+.btn.sm{padding:.35rem .8rem;font-size:.85rem}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{background:var(--line)}
+.muted{color:var(--mute);font-size:.9rem}
+/* app shell */
+#app{display:none;min-height:100vh;grid-template-columns:250px 1fr}
+.side{background:var(--navy);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:1.6rem;position:sticky;top:0;height:100vh}
+.side .logo{padding:0 .5rem}
+nav{display:flex;flex-direction:column;gap:.2rem}
+nav button{border:0;background:none;text-align:left;padding:.62rem .9rem;border-radius:8px;cursor:pointer;color:#a9b6d3;font-weight:500;transition:.2s}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button[aria-current=page]{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+.side-foot{margin-top:auto;display:flex;align-items:center;gap:.7rem;color:#fff;font-size:.9rem;flex-wrap:wrap}
+.av{width:38px;height:38px;border-radius:50%;background:var(--gold);color:#0e1b3a;display:grid;place-items:center;font:700 .9rem var(--f-sub)}
+.side-foot span{display:block;color:#93a1c2;font-size:.8rem;text-transform:capitalize}.side-foot .btn{margin-left:auto;color:#fff;border-color:rgba(255,255,255,.25)}
+.content{padding:1.8rem 2.2rem 4rem;max-width:1120px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;padding-bottom:1rem;border-bottom:1px solid var(--line)}
+.top h1{font-size:clamp(1.8rem,4vw,2.5rem)}
+.view{animation:swap .4s cubic-bezier(.2,.8,.2,1)}@keyframes swap{from{opacity:0;transform:translateY(10px)}}
+.view>h2{display:none}.view>h2.keep{display:block;margin-top:1.3rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:1.2rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.3rem;box-shadow:0 1px 2px rgba(15,26,48,.04)}
+.card.hero{background:linear-gradient(120deg,var(--navy),#1c3a7a);color:#fff;border:0;grid-column:1/-1;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between}
+.hero .muted{color:#b9c5e0}
+.big{font:800 clamp(2.4rem,6vw,3.6rem) var(--f-sub);line-height:1.1;margin:.2rem 0}
+.ring{--p:0;width:104px;height:104px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),rgba(255,255,255,.2) 0);display:grid;place-items:center}
+.ring span{width:80px;height:80px;border-radius:50%;background:#14295a;display:grid;place-items:center;font:700 1.2rem var(--f-sub)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.tag{padding:.12rem .65rem;border-radius:99px;font-size:.8rem;font-weight:600;background:var(--line);color:var(--mute)}
+.tag.ok{background:color-mix(in srgb,var(--mint) 15%,transparent);color:var(--mint)}.tag.warn{background:color-mix(in srgb,var(--sun) 16%,transparent);color:var(--sun)}.tag.bad{background:color-mix(in srgb,var(--rose) 15%,transparent);color:var(--rose)}
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:.5rem;margin-top:1rem}
+.rm{aspect-ratio:1;border-radius:8px;display:grid;place-items:center;font-weight:600;font-size:.9rem;background:var(--line);animation:pop .45s backwards}
+.rm.full{background:color-mix(in srgb,var(--rose) 18%,transparent);color:var(--rose)}.rm.part{background:color-mix(in srgb,var(--sun) 20%,transparent);color:var(--sun)}.rm.free{background:color-mix(in srgb,var(--mint) 18%,transparent);color:var(--mint)}
+.rm.mine{outline:2px solid var(--acc);outline-offset:2px}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.bar{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:.5rem}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--mint));width:0;transition:width 1s}
+.notice{border-left:3px solid var(--gold);background:var(--surface);border-radius:0 10px 10px 0;padding:.8rem 1rem;margin:.8rem 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.modal{position:fixed;inset:0;background:rgba(8,16,31,.6);display:none;place-items:center;padding:1rem;z-index:9}.modal.on{display:grid}
+.receipt{background:var(--surface);border-radius:12px;padding:1.6rem;max-width:380px;width:100%;animation:pop .3s;border-top:6px solid var(--acc)}
+.toast{position:fixed;left:50%;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,200%);background:var(--navy);color:#fff;padding:.7rem 1.2rem;border-radius:10px;transition:.4s;z-index:10}.toast.on{transform:translate(-50%,0)}
+@media(max-width:860px){#login{grid-template-columns:1fr}.brand{padding:1.6rem}#app{grid-template-columns:1fr}
+.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:.8rem;padding:.9rem 1rem}nav{flex-direction:row;overflow-x:auto;order:3;width:100%}nav button{white-space:nowrap}.side-foot{margin:0 0 0 auto}.side-foot div:not(.av){display:none}.content{padding:1.2rem 1rem 4rem}}
+@media print{.side,.top,.toast{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* ===== Voice assistant ===== */
+#ai{position:fixed;right:max(1rem,env(safe-area-inset-right,0px));bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:8}
+#aiBtn{width:58px;height:58px;border-radius:50%;border:0;background:var(--gold);color:#0e1b3a;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px rgba(14,27,58,.35);position:relative;transition:transform .2s}
+#aiBtn:hover{transform:scale(1.06)}
+#aiBtn::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold);animation:ping 2.6s infinite}
+.listening #aiBtn::after{animation-duration:.9s}
+@keyframes ping{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
+@keyframes beat{50%{transform:scale(1.12)}}
+#aiPanel{position:absolute;right:0;bottom:72px;width:min(370px,calc(100vw - 2rem));height:min(500px,72vh);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(8,16,31,.3);display:none;flex-direction:column;overflow:hidden;transform-origin:bottom right}
+#aiPanel.on{display:flex;animation:pop .25s}
+.ai-h{background:var(--navy);color:#fff;padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.ai-h span{display:block;font-size:.8rem;color:#93a1c2}.ai-h div:last-child{display:flex;gap:.4rem}
+.ai-h button{background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:.2rem .6rem;cursor:pointer;font-size:.8rem}
+#aiLog{flex:1;overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:.5rem}
+.msg{max-width:86%;padding:.55rem .8rem;border-radius:12px;font-size:.92rem;animation:swap .25s}
+.msg.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}.msg.me{align-self:flex-end;background:var(--acc);color:var(--acc-ink)}
+#aiChips{display:flex;flex-wrap:wrap;gap:.4rem;padding:0 .9rem .6rem}
+#aiChips button{border:1px solid var(--line);background:transparent;border-radius:99px;padding:.25rem .7rem;font-size:.8rem;cursor:pointer;transition:.2s}#aiChips button:hover{background:var(--line)}
+.ai-f{display:flex;gap:.5rem;padding:.7rem;border-top:1px solid var(--line);align-items:center}
+.mic{flex:none;width:42px;height:42px;border-radius:50%;border:0;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;cursor:pointer}
+.listening .mic{background:var(--rose);color:#fff;animation:beat .9s infinite}
+@media print{#ai{display:none!important}}
+
+</style>
+</head>
+<body>
+<section id="login">
+  <div class="brand">
+    <div class="logo"><i>H</i>Hostelo</div>
+    <div><h1>Your hostel stay, managed in one place.</h1>
+    <p>Check room details, pay fees, raise complaints and approve visitors without queues or paperwork.</p>
+    <div class="facts"><div><b>412</b><span>Residents</span></div><div><b>24</b><span>Rooms in Block B</span></div><div><b>24/7</b><span>Online access</span></div></div></div>
+    <small>© 2026 Hostelo Hostel Management System</small>
+  </div>
+  <div class="panel"><div class="formbox">
+    <h2>Sign in</h2><p class="muted">Use your hostel account to continue.</p>
+    <div class="roles" role="group" aria-label="Sign in as">
+      <button aria-pressed="true" data-role="student">Student</button>
+      <button aria-pressed="false" data-role="warden">Warden</button>
+      <button aria-pressed="false" data-role="admin">Admin</button>
+    </div>
+    <label class="field"><span>Full name</span><input id="nm" value="Priya Raman" autocomplete="off"></label>
+    <label class="field"><span>Roll number</span><input id="rl" value="CS21B047" autocomplete="off"></label>
+    <button class="btn" id="go">Sign in</button>
+    <p class="muted" style="margin-top:1rem">Demo version: any details work, and data stays in your browser.</p>
+  </div></div>
+</section>
+
+<div id="app">
+  <aside class="side"><div class="logo"><i>H</i>Hostelo</div><nav id="nav" aria-label="Sections"></nav>
+    <div class="side-foot"><div class="av" id="av"></div><div><b id="who"></b><span id="rrole"></span></div><button class="btn ghost sm" id="out">Sign out</button></div></aside>
+  <section class="content"><div class="top"><h1 id="pt"></h1><span class="muted" id="dt"></span></div><main id="main"></main></section>
+</div>
+
+<div id="ai" style="display:none">
+  <section id="aiPanel" aria-label="Voice assistant">
+    <div class="ai-h"><div><b>Hostelo Assistant</b><span id="aiSt">Ready</span></div><div><button id="aiSp" aria-pressed="true">Voice on</button><button id="aiX" aria-label="Close assistant">Close</button></div></div>
+    <div id="aiLog" aria-live="polite"></div><div id="aiChips"></div>
+    <div class="ai-f"><button class="mic" id="aiMic" aria-label="Speak"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><input id="aiIn" placeholder="Type or tap the mic" aria-label="Ask the assistant"><button class="btn sm" id="aiSend">Send</button></div>
+  </section>
+  <button id="aiBtn" aria-label="Open voice assistant"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+</div>
+
+<div class="modal" id="md"><div class="receipt" id="rc"></div></div>
+<div class="toast" id="ts" role="status"></div>
+
+<script>const $=s=>document.querySelector(s);
+const KEY="hostelo-v1";
+const seed=()=>({fees:[{id:1,term:"Semester 1 hostel fee",amt:42000,paid:true,on:"12 Jul 2026"},{id:2,term:"Semester 2 hostel fee",amt:42000,paid:false,due:"15 Nov 2026"},{id:3,term:"Mess advance",amt:6500,paid:false,due:"30 Oct 2026"}],
+complaints:[{id:1,t:"Ceiling fan makes noise",cat:"Electrical",st:"Resolved",d:"02 Sep"},{id:2,t:"Wi-Fi drops in the evening",cat:"Network",st:"In progress",d:"18 Oct"}],
+visitors:[{id:1,n:"Meena Raman (mother)",d:"24 Oct",st:"Requested"},{id:2,n:"Arjun (cousin)",d:"10 Oct",st:"Exited"}],
+notices:[{t:"Water supply off on Sunday",b:"Tank cleaning in Block B, 9 am to 1 pm.",d:"22 Oct"},{t:"Diwali night curfew extended",b:"Gates close at 11:30 pm on 8 November.",d:"20 Oct"},{t:"Room inspection next week",b:"Wardens visit between 4 and 6 pm. Please keep rooms tidy.",d:"15 Oct"}]});
+let S,role="student",user={},tab="home";
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+S=S||seed();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const toast=m=>{const t=$("#ts");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200)};
+const inr=n=>"₹"+n.toLocaleString("en-IN");
+const tags={Resolved:"ok","In progress":"warn",Open:"bad",Approved:"ok",Requested:"warn",Entered:"ok",Exited:"",Declined:"bad"};
+const tg=s=>`<span class="tag ${tags[s]||""}">${s}</span>`;
+const tabs={student:[["home","Dashboard"],["room","My room"],["fees","Fees"],["comp","Complaints"],["vis","Visitors"],["not","Notices"]],
+warden:[["wc","Complaints"],["wv","Visitors"],["not","Notices"]],admin:[["ad","Overview"],["room","Rooms"],["fees","Fee ledger"]]};
+const occ=[2,2,1,0,2,2,1,2,2,0,1,2,2,2,2,1,0,2,2,1,2,2,0,2]; // 24 rooms, 0 free 1 partial 2 full
+const roomsHTML=()=>`<div class="rooms">${occ.map((o,i)=>{const n=201+i;return `<div class="rm ${["free","part","full"][o]} ${n==214?"mine":""}" style="animation-delay:${i*35}ms" title="${["Vacant","1 of 2 beds taken","Full"][o]}">${n}</div>`}).join("")}</div>
+<p class="muted">Green is vacant, yellow has one bed free, red is full.</p>`;
+function countUp(){document.querySelectorAll("[data-n]").forEach(el=>{const to=+el.dataset.n,f=el.dataset.f==="inr";let s=null;const step=t=>{s=s||t;const p=Math.min((t-s)/900,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=f?inr(v):v;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)});
+document.querySelectorAll("[data-bar]").forEach(el=>setTimeout(()=>el.style.width=el.dataset.bar+"%",80));
+document.querySelectorAll(".ring").forEach(el=>{let p=0,to=+el.dataset.p;const i=setInterval(()=>{p+=2;el.style.setProperty("--p",Math.min(p,to));if(p>=to)clearInterval(i)},14)})}
+const V={
+home(){const due=S.fees.filter(f=>!f.paid),tot=due.reduce((a,f)=>a+f.amt,0),pend=S.complaints.filter(c=>c.st!=="Resolved").length,paid=S.fees.filter(f=>f.paid).reduce((a,f)=>a+f.amt,0),pct=Math.round(paid/(paid+tot||1)*100);
+return `<h2 class="keep">Hi ${user.name.split(" ")[0]}, welcome back</h2>
+<div class="grid"><div class="card hero"><div><p class="muted">Your room</p><div class="big">B-214</div><p class="muted">Third floor · shared with Ananya S.</p></div>
+<div style="text-align:center"><div class="ring" data-p="${pct}"><span>${pct}%</span></div><p class="muted">fees paid</p></div></div>
+<div class="card"><p class="muted">Fees due</p><div class="big" data-n="${tot}" data-f="inr">0</div><p class="muted">${due.length?"Next due "+due[0].due:"You’re all clear"}</p><p><button class="btn sm" onclick="go('fees')">Pay now</button></p></div>
+<div class="card"><p class="muted">Open complaints</p><div class="big" data-n="${pend}">0</div><p><button class="btn sm ghost" onclick="go('comp')">Track them</button></p></div>
+<div class="card"><p class="muted">Latest notice</p><h3>${S.notices[0].t}</h3><p class="muted">${S.notices[0].b}</p></div></div>`},
+room(){return `<h2>${role==="admin"?"Room occupancy":"My room"}</h2><div class="grid"><div class="card"><h3>Block B · Room 214</h3>
+<div class="row"><span class="muted">Type</span><b>Double sharing</b></div><div class="row"><span class="muted">Roommate</span><b>Ananya S.</b></div><div class="row"><span class="muted">Floor</span><b>Third</b></div><div class="row"><span class="muted">Check-in</span><b>14 Jul 2026</b></div></div>
+<div class="card" style="grid-column:span 2;min-width:min(100%,300px)"><h3>Block B at a glance</h3>${roomsHTML()}</div></div>`},
+fees(){const adm=role==="admin",col=S.fees.filter(f=>f.paid).reduce((a,f)=>a+f.amt,0),all=S.fees.reduce((a,f)=>a+f.amt,0);
+return `<h2>${adm?"Fee ledger":"Fees"}</h2><div class="grid"><div class="card" style="grid-column:1/-1"><p class="muted">Collected ${inr(col)} of ${inr(all)}</p><div class="bar"><i data-bar="${Math.round(col/all*100)}"></i></div></div>
+<div class="card" style="grid-column:1/-1">${S.fees.map(f=>`<div class="row"><div><b>${f.term}</b><div class="muted">${f.paid?"Paid "+f.on:"Due "+f.due}</div></div><div>${inr(f.amt)} ${f.paid?`<button class="btn sm ghost" onclick="rcpt(${f.id})">Receipt</button>`:adm?tg("Pending"):`<button class="btn sm" onclick="pay(${f.id})">Pay</button>`}</div></div>`).join("")}</div></div>`},
+comp(){return `<h2>Complaints</h2><div class="grid"><form class="card" id="cf"><h3>Raise a complaint</h3><label class="field"><span>Category</span><select id="cc"><option>Electrical</option><option>Plumbing</option><option>Network</option><option>Cleaning</option><option>Furniture</option></select></label><label class="field"><span>What’s wrong?</span><textarea id="ct" rows="3" required></textarea></label><button class="btn">Send to warden</button></form>
+<div class="card"><h3>Your history</h3>${S.complaints.length?S.complaints.slice().reverse().map(c=>`<div class="row"><div><b>${c.t}</b><div class="muted">${c.cat} · ${c.d}</div></div>${tg(c.st)}</div>`).join(""):"<p class='muted'>Nothing yet. Raise one when something breaks.</p>"}</div></div>`},
+vis(){return `<h2>Visitors</h2><div class="grid"><form class="card" id="vf"><h3>Register a visitor</h3><label class="field"><span>Visitor name and relation</span><input id="vn" required></label><label class="field"><span>Visit date</span><input id="vd" type="date" required></label><button class="btn">Request pass</button></form>
+<div class="card"><h3>Your visitors</h3>${S.visitors.slice().reverse().map(v=>`<div class="row"><div><b>${v.n}</b><div class="muted">${v.d}</div></div>${tg(v.st)}</div>`).join("")}</div></div>`},
+not(){return `<h2>Notices</h2>${role==="warden"?`<form class="card" id="nf" style="margin-top:1rem"><label class="field"><span>Title</span><input id="nt" required></label><label class="field"><span>Message</span><input id="nb" required></label><button class="btn">Post notice</button></form>`:""}${S.notices.map(n=>`<div class="notice"><h3>${n.t}</h3><p class="muted" style="margin:.2rem 0">${n.b} · ${n.d}</p></div>`).join("")}`},
+wc(){return `<h2>Complaints to resolve</h2><div class="card" style="margin-top:1rem">${S.complaints.map(c=>`<div class="row"><div><b>${c.t}</b><div class="muted">${c.cat} · B-214 · ${c.d}</div></div><div>${tg(c.st)} ${c.st==="Resolved"?"":`<button class="btn sm" onclick="setC(${c.id})">${c.st==="Open"?"Start":"Mark resolved"}</button>`}</div></div>`).join("")}</div>`},
+wv(){return `<h2>Visitor desk</h2><div class="card" style="margin-top:1rem">${S.visitors.map(v=>{const a=v.st==="Requested"?`<button class="btn sm" onclick="setV(${v.id},'Approved')">Approve</button> <button class="btn sm ghost" onclick="setV(${v.id},'Declined')">Decline</button>`:v.st==="Approved"?`<button class="btn sm" onclick="setV(${v.id},'Entered')">Log entry</button>`:v.st==="Entered"?`<button class="btn sm" onclick="setV(${v.id},'Exited')">Log exit</button>`:"";return `<div class="row"><div><b>${v.n}</b><div class="muted">${v.d}${v.t?" · "+v.t:""}</div></div><div>${tg(v.st)} ${a}</div></div>`}).join("")}</div>`},
+ad(){const fr=occ.filter(o=>o<2).length;return `<h2>Hostel overview</h2><div class="grid"><div class="card"><p class="muted">Students</p><div class="big" data-n="412">0</div></div><div class="card"><p class="muted">Rooms with space</p><div class="big" data-n="${fr}">0</div></div><div class="card"><p class="muted">Open complaints</p><div class="big" data-n="${S.complaints.filter(c=>c.st!=="Resolved").length}">0</div></div><div class="card"><p class="muted">Pending visitors</p><div class="big" data-n="${S.visitors.filter(v=>v.st==="Requested").length}">0</div></div></div>`}};
+function render(){const m=$("#main");$("#pt").textContent=(tabs[role].find(t=>t[0]===tab)||[0,""])[1];m.innerHTML=`<div class="view">${V[tab]()}</div>`;
+const f=$("#cf");if(f)f.onsubmit=e=>{e.preventDefault();S.complaints.push({id:Date.now(),t:$("#ct").value,cat:$("#cc").value,st:"Open",d:"23 Oct"});save();toast("Complaint sent");render()};
+const v=$("#vf");if(v)v.onsubmit=e=>{e.preventDefault();S.visitors.push({id:Date.now(),n:$("#vn").value,d:$("#vd").value,st:"Requested"});save();toast("Pass requested");render()};
+const n=$("#nf");if(n)n.onsubmit=e=>{e.preventDefault();S.notices.unshift({t:$("#nt").value,b:$("#nb").value,d:"23 Oct"});save();toast("Notice posted");render()};
+document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.t===tab?"page":"false"));
+countUp()}
+function go(t){tab=t;render();scrollTo({top:0,behavior:"smooth"})}
+function pay(id){const f=S.fees.find(x=>x.id==id);f.paid=true;f.on="23 Oct 2026";save();toast(inr(f.amt)+" paid");render();rcpt(id)}
+function rcpt(id){const f=S.fees.find(x=>x.id==id);$("#rc").innerHTML=`<h3>Payment receipt</h3><p class="muted">No. HSL-${String(id).padStart(5,"0")}</p><div class="row"><span>Student</span><b>${user.name}</b></div><div class="row"><span>Roll</span><b>${user.roll}</b></div><div class="row"><span>For</span><b>${f.term}</b></div><div class="row"><span>Paid on</span><b>${f.on}</b></div><div class="row"><span>Amount</span><b>${inr(f.amt)}</b></div><p><button class="btn" onclick="print()">Print</button> <button class="btn ghost" onclick="$('#md').classList.remove('on')">Close</button></p>`;$("#md").classList.add("on")}
+function setC(id){const c=S.complaints.find(x=>x.id==id);c.st=c.st==="Open"?"In progress":"Resolved";save();toast("Status updated");render()}
+function setV(id,st){const v=S.visitors.find(x=>x.id==id);v.st=st;if(st==="Entered"||st==="Exited")v.t=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});save();toast("Visitor "+st.toLowerCase());render()}
+document.querySelectorAll(".roles button").forEach(b=>b.onclick=()=>{role=b.dataset.role;document.querySelectorAll(".roles button").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+$("#md").onclick=e=>{if(e.target.id==="md")e.target.classList.remove("on")};
+$("#go").onclick=()=>{user={name:$("#nm").value.trim()||"Student",roll:$("#rl").value.trim()||"CS21B047"};$("#login").classList.add("leaving");
+setTimeout(()=>{$("#login").style.display="none";$("#app").style.display="grid";$("#who").textContent=user.name;$("#rrole").textContent=role;$("#av").textContent=user.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();$("#dt").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const list=tabs[role];tab=list[0][0];$("#nav").innerHTML=list.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.t));render();AI.start()},matchMedia("(prefers-reduced-motion:reduce)").matches?0:350)};
+$("#out").onclick=()=>{$("#app").style.display="none";$("#login").style.display="grid";$("#login").classList.remove("leaving");AI.stop()};
+/* ===== Voice assistant (works offline in the browser: Web Speech API + built-in intent rules) ===== */
+const AI=(()=>{
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition,SS=window.speechSynthesis;
+let rec,on=false,voice=true,confirmFn=null;
+const has=(t,...w)=>w.some(x=>t.includes(x)),cap=s=>s.charAt(0).toUpperCase()+s.slice(1),
+d=()=>new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short"}),
+plural=(n,w)=>n+" "+w+(n===1?"":"s");
+const MAP={student:{fee:"fees",complaint:"comp",visitor:"vis",notice:"not",room:"room",home:"home",dashboard:"home"},warden:{complaint:"wc",visitor:"wv",notice:"not"},admin:{overview:"ad",dashboard:"ad",home:"ad",room:"room",fee:"fees"}};
+const HELP={student:"I can tell you about your room, fees and complaints, pay a fee, raise a complaint, register a visitor or read the latest notice. Try: raise complaint the fan is noisy.",
+warden:"I can list pending complaints, resolve them, show and approve visitor requests, and post notices. Try: post notice water supply off on Sunday.",
+admin:"I can give an overview, vacant rooms, fee collection and complaint counts. Try: give me an overview."};
+const CHIPS={student:["What’s my room?","How much fee is due?","Pay my next fee","My complaints","Latest notice"],
+warden:["Pending complaints","Visitor requests","Approve all visitors","Resolve all complaints","Post notice: water supply off on Sunday"],
+admin:["Give me an overview","Vacant rooms","Fee collection","Open complaints"]};
+function add(t,c){const m=document.createElement("div"),l=$("#aiLog");m.className="msg "+c;m.textContent=t;l.appendChild(m);l.scrollTop=l.scrollHeight}
+function speakIt(t){if(!voice||!SS)return;SS.cancel();const u=new SpeechSynthesisUtterance(t.replace(/₹/g,"rupees "));u.lang="en-IN";SS.speak(u)}
+function say(t){add(t,"bot");speakIt(t)}
+function setL(v){on=v;$("#ai").classList.toggle("listening",v);$("#aiSt").textContent=v?"Listening…":"Ready"}
+function reply(t,raw){
+ if(confirmFn){const f=confirmFn;confirmFn=null;return /^(yes|yeah|confirm|ok|okay|sure|do it|proceed)/.test(t)?f():"Okay, cancelled."}
+ if(/^(hi|hello|hey)\b/.test(t))return "Hello "+user.name.split(" ")[0]+"! How can I help you today?";
+ if(has(t,"help","what can you do"))return HELP[role];
+ const nav=t.match(/^(?:open|go to|take me to|navigate to|show me the|show)\s+(?:the\s+|my\s+)?(\w+)/);
+ if(nav){const k=Object.keys(MAP[role]).find(x=>nav[1].startsWith(x));if(k){go(MAP[role][k]);return "Opening "+k+"."}}
+ const C=S.complaints,openC=C.filter(c=>c.st!=="Resolved"),pendV=S.visitors.filter(v=>v.st==="Requested"),dueF=S.fees.filter(f=>!f.paid),free=occ.filter(o=>o<2).length;
+ if(has(t,"overview","summary","stats","statistics","report","how many students")){
+  if(role!=="admin")return "The hostel overview is available to admins.";
+  return `There are 412 students. ${plural(free,"room")} have space, ${plural(openC.length,"complaint")} are open, ${plural(pendV.length,"visitor request")} are waiting, and ${inr(dueF.reduce((a,f)=>a+f.amt,0))} in fees is pending.`}
+ if(has(t,"complaint","issue","problem")){
+  const m=raw.match(/(?:raise|file|report|register|submit|lodge|log)\s+(?:a\s+|an\s+)?(?:new\s+)?(?:complaint|issue|problem)\s*(?:about|for|that|saying|regarding|:|,|-)?\s*(.+)/i);
+  if(m){if(role!=="student")return "Only students can raise complaints.";const x=m[1].trim(),
+   cat=has(x.toLowerCase(),"fan","light","switch","power","socket")?"Electrical":has(x.toLowerCase(),"water","tap","leak","flush","bathroom")?"Plumbing":has(x.toLowerCase(),"wifi","wi-fi","internet","network")?"Network":has(x.toLowerCase(),"clean","dust","garbage","dirty")?"Cleaning":"General";
+   S.complaints.push({id:Date.now(),t:cap(x),cat,st:"Open",d:d()});save();render();return `Done. I’ve raised a ${cat.toLowerCase()} complaint: ${x}. The warden has been notified.`}
+  if(has(t,"resolve","close","mark")){if(role!=="warden")return "Only the warden can resolve complaints.";if(!openC.length)return "There are no open complaints.";
+   const l=t.includes("all")?openC:[openC[0]];l.forEach(c=>c.st="Resolved");save();render();return `Marked ${plural(l.length,"complaint")} as resolved.`}
+  if(role==="student")return C.length?`You have ${plural(C.length,"complaint")}. `+C.slice(-3).reverse().map(c=>`${c.t} is ${c.st.toLowerCase()}`).join(". ")+".":"You haven’t raised any complaints.";
+  return openC.length?`There ${openC.length>1?"are":"is"} ${plural(openC.length,"open complaint")}. Latest: ${openC[openC.length-1].t}.`:"All complaints are resolved."}
+ if(has(t,"fee","due","pay","owe","receipt","collect","revenue")){
+  const col=S.fees.filter(f=>f.paid).reduce((a,f)=>a+f.amt,0),tot=dueF.reduce((a,f)=>a+f.amt,0);
+  if(role==="admin")return `Fees collected so far: ${inr(col)}. Pending: ${inr(tot)}.`;
+  if(role==="warden")return "Fee details are managed by the admin.";
+  if(has(t,"receipt")){go("fees");return "Your receipts are on the fees page."}
+  if(/\bpay\b/.test(t)){if(!dueF.length)return "You have no pending fees.";const f=dueF[0];
+   confirmFn=()=>{pay(f.id);return `Payment of ${inr(f.amt)} completed. Your receipt is on screen.`};return `Your next fee is ${f.term}, ${inr(f.amt)}. Say confirm to pay now.`}
+  return dueF.length?`You have ${plural(dueF.length,"pending fee")} totalling ${inr(tot)}. The next one is due on ${dueF[0].due}.`:"All your fees are paid. Thank you."}
+ if(has(t,"visitor","guest","approve")){
+  const m=raw.match(/(?:register|add|invite|expect|book|request)\s+(?:a\s+)?(?:visitor|guest)\s+(?:named\s+|called\s+)?(.+?)(?:\s+(?:on|for)\s+(today|tomorrow))?$/i);
+  if(m){if(role!=="student")return "Visitors are registered by students.";const dt=new Date();if((m[2]||"").toLowerCase()==="tomorrow")dt.setDate(dt.getDate()+1);
+   S.visitors.push({id:Date.now(),n:m[1].trim(),d:dt.toISOString().slice(0,10),st:"Requested"});save();render();return `Visitor pass requested for ${m[1].trim()}. The warden will review it.`}
+  if(has(t,"approve")){if(role!=="warden")return "Only the warden can approve visitors.";if(!pendV.length)return "No visitor requests are waiting.";pendV.forEach(v=>v.st="Approved");save();render();return `Approved ${plural(pendV.length,"visitor")}.`}
+  if(role==="student")return S.visitors.length?S.visitors.slice(-3).reverse().map(v=>`${v.n} is ${v.st.toLowerCase()}`).join(". ")+".":"You have no visitors registered.";
+  return pendV.length?`${plural(pendV.length,"visitor request")} waiting: ${pendV.map(v=>v.n).join(", ")}.`:"No visitor requests are waiting."}
+ if(has(t,"notice","announcement","news")){
+  const m=raw.match(/post\s+(?:a\s+)?(?:notice|announcement)\s*(?:saying|that|:|-)?\s*(.+)/i);
+  if(m){if(role!=="warden")return "Only the warden can post notices.";const b=m[1].trim(),w=b.split(" ").slice(0,6).join(" ");S.notices.unshift({t:cap(w),b:cap(b),d:d()});save();render();return "Notice posted for all students."}
+  return `Latest notice: ${S.notices[0].t}. ${S.notices[0].b}`}
+ if(has(t,"room","vacant","available"))return role==="student"?"You’re in Block B, room 214 on the third floor, sharing with Ananya S.":`${plural(free,"room")} in Block B ${free===1?"has":"have"} space, and ${occ.filter(o=>o===0).length} are completely vacant.`;
+ return "Sorry, I didn’t understand that. "+HELP[role]}
+function ask(raw){const x=raw.trim().replace(/[.!?]+$/,"");if(!x)return;add(x,"me");say(reply(x.toLowerCase(),x))}
+function listen(){
+ if(!SR){say("Voice input isn’t supported in this browser. Please type your question, or use Chrome or Edge.");return}
+ if(on){rec.stop();return}
+ if(SS)SS.cancel();rec=new SR();rec.lang="en-IN";
+ rec.onresult=e=>ask(e.results[0][0].transcript);
+ rec.onerror=e=>{setL(false);add(e.error==="not-allowed"||e.error==="service-not-allowed"?"Microphone access is blocked. Allow it in the address bar, or type your question instead.":"I didn’t catch that. Please try again.","bot")};
+ rec.onend=()=>setL(false);setL(true);try{rec.start()}catch(e){setL(false)}}
+const openP=v=>$("#aiPanel").classList.toggle("on",v);
+$("#aiBtn").onclick=()=>openP(!$("#aiPanel").classList.contains("on"));
+$("#aiX").onclick=()=>openP(false);
+$("#aiMic").onclick=listen;
+$("#aiSp").onclick=e=>{voice=!voice;e.target.textContent=voice?"Voice on":"Voice off";e.target.setAttribute("aria-pressed",voice);if(!voice&&SS)SS.cancel()};
+const send=()=>{const i=$("#aiIn");ask(i.value);i.value=""};
+$("#aiSend").onclick=send;$("#aiIn").onkeydown=e=>{if(e.key==="Enter")send()};
+return{start(){confirmFn=null;$("#ai").style.display="block";$("#aiLog").innerHTML="";
+ $("#aiChips").innerHTML=CHIPS[role].map(c=>`<button type="button">${c}</button>`).join("");
+ $("#aiChips").querySelectorAll("button").forEach(b=>b.onclick=()=>ask(b.textContent));
+ add("Hi "+user.name.split(" ")[0]+", I’m your "+role+" assistant. Tap the mic and ask me something, or pick a suggestion.","bot");openP(true)},
+ stop(){$("#ai").style.display="none";openP(false);if(SS)SS.cancel();if(on&&rec)rec.stop()}}
+})();
+</script>
+</body>
+</html>
